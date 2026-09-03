@@ -1,0 +1,74 @@
+---
+import '../styles/global.css';
+interface Props {
+  title?: string;
+  avatar?: string;
+}
+const { title = 'BrunIF — Проєкти', avatar = 'https://avatars.githubusercontent.com/BrunIF' } =
+  Astro.props;
+const avatarUrl = avatar.endsWith('?') ? avatar : avatar + '?size=80';
+---
+
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta
+      name="description"
+      content="Проєкти BrunIF: навчальні курси з програмування для дітей та вебзастосунки."
+    />
+    <script is:inline>
+      (() => {
+        const stored = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (stored === 'dark' || (!stored && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="/">
+          <img class="avatar" src={avatarUrl} alt="BrunIF" width="40" height="40" />
+          <span class="brand-name">BrunIF</span>
+        </a>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Перемкнути тему">
+          <span class="icon-sun">☀️</span>
+          <span class="icon-moon">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="container main-content">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        © <span id="year"></span> BrunIF · Зроблено з ❤️ для юних програмістів
+      </div>
+    </footer>
+
+    <script is:inline>
+      (() => {
+        const btn = document.getElementById('theme-toggle');
+        const root = document.documentElement;
+        const update = () => {
+          const isDark = root.classList.contains('dark');
+          btn.setAttribute('aria-pressed', String(isDark));
+        };
+        btn.addEventListener('click', () => {
+          const isDark = root.classList.toggle('dark');
+          localStorage.setItem('theme', isDark ? 'dark' : 'light');
+          update();
+        });
+        update();
+        document.getElementById('year').textContent = new Date().getFullYear();
+      })();
+    </script>
+  </body>
+</html>

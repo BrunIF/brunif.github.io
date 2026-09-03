@@ -1,0 +1,46 @@
+---
+import { render, getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+
+const [indexEntry] = await getCollection('pages', (p) => p.id === 'index');
+const [dataEntry] = await getCollection('pages', (p) => p.id === 'data');
+
+if (!indexEntry || !dataEntry) {
+  throw new Error('Missing index.md or data.md content entry');
+}
+
+const { Content } = await render(indexEntry);
+const projects = dataEntry.data.projects ?? [];
+const avatar = indexEntry.data.avatar ?? 'https://avatars.githubusercontent.com/BrunIF';
+---
+
+<Layout title={indexEntry.data.title} avatar={avatar}>
+  <article>
+    <Content />
+  </article>
+  <section class="project-list">
+    {
+      projects.map((project) => (
+        <article class="card">
+          <h2>{project.name}</h2>
+          <p class="desc">{project.description}</p>
+          <div class="tags">
+            {project.tags?.map((tag) => <span class="pill">{tag}</span>)}
+          </div>
+          <div class="actions">
+            {project.links?.map((link) => (
+              <a
+                class={link.primary ? 'btn' : 'btn btn-ghost'}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </article>
+      ))
+    }
+  </section>
+</Layout>
