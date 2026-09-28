@@ -37,4 +37,15 @@ projects:
         primary: true
       - label: Код на GitHub
         href: https://github.com/nesti-app/nesti/
+  - name: asdf-tui
+    description: >
+      TUI-менеджер для asdf version manager — керуйте версіями інструментів
+      безпосередньо з терміналу.
+    tags:
+      - TUI
+      - asdf
+    links:
+      - label: Код на GitHub
+        href: https://github.com/BrunIF/asdf-tui
+        primary: true
 ---
